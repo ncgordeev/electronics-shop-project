@@ -47,3 +47,24 @@ class Item:
         Применяет установленную скидку для конкретного товара.
         """
         self.price *= self.pay_rate
+
+    @classmethod
+    def instantiate_from_csv(cls, file_path):
+        """
+        This method initialize the class instances from file
+        """
+        pass
+
+    @staticmethod
+    def string_to_number(string_to_num):
+        """
+        This method convert string-number to number
+        """
+        if len(string_to_num) == 0:
+            raise ValueError("Значение не должно быть пустым!")
+        elif string_to_num.isalpha():
+            raise ValueError("Значение должно быть числом!")
+        else:
+            numbers = string_to_num.split(".")
+            number = int(numbers[0])
+            return number
