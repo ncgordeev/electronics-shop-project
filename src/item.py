@@ -27,8 +27,10 @@ class Item:
 
     @name.setter
     def name(self, name: str):
-        if len(name) < 10:
+        if 0 < len(name) < 10:
             self.__name = name
+        elif len(name) == 0:
+            raise ValueError("Наименование не должно быть пустым")
         else:
             self.__name = name[:10]
 
