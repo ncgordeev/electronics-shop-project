@@ -60,3 +60,26 @@ def test_name_setter_empty_value():
     item = Item("", 200, 50)
     with pytest.raises(ValueError, match="Наименование не должно быть пустым"):
         item.name = ""
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("5", 5),
+        ("5.5", 5),
+        ("5.0", 5),
+    ]
+)
+def test_string_to_number(value, expected):
+    new_val = Item.string_to_number(value)
+    assert new_val == expected
+
+
+def test_string_to_number_empty():
+    with pytest.raises(ValueError, match="Значение не должно быть пустым!"):
+        Item.string_to_number("")
+
+
+def test_string_to_number_type_err():
+    with pytest.raises(ValueError, match="Значение должно быть числом!"):
+        Item.string_to_number("some")
