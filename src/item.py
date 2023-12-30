@@ -53,7 +53,19 @@ class Item:
         """
         This method initialize the class instances from file
         """
-        pass
+        try:
+            with open(file_path, encoding="windows-1251") as file:
+                Item.all.clear()
+                reader = DictReader(file)
+                for row in reader:
+                    Item(
+                        name=row["name"],
+                        price=float(row["price"]),
+                        quantity=Item.string_to_number(row["quantity"]),
+                    )
+        except FileNotFoundError:
+            print(f"Файл {file_path} поврежден или не найден. Проверьте путь.")
+            raise
 
     @staticmethod
     def string_to_number(string_to_num):
