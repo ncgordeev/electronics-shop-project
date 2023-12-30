@@ -2,6 +2,7 @@
 import pytest
 
 from src.item import Item
+from config import ITEMS_CSV, ITEMS_CSV_ERR
 
 
 @pytest.mark.parametrize(
@@ -83,3 +84,19 @@ def test_string_to_number_empty():
 def test_string_to_number_type_err():
     with pytest.raises(ValueError, match="Значение должно быть числом!"):
         Item.string_to_number("some")
+
+
+def test_instantiate_from_csv():
+    Item.instantiate_from_csv(ITEMS_CSV)
+    assert len(Item.all) == 5
+
+
+def test_instantiate_from_csv_err():
+    with pytest.raises(FileNotFoundError):
+        Item.instantiate_from_csv(ITEMS_CSV_ERR)
+
+
+def test_instantiate_from_csv_item():
+    Item.instantiate_from_csv(ITEMS_CSV)
+    first_item = Item.all[0]
+    assert first_item.name == "Смартфон"
