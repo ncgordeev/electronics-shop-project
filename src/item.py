@@ -55,13 +55,13 @@ class Item:
         """
         try:
             with open(file_path, encoding="windows-1251") as file:
-                Item.all.clear()
+                cls.all.clear()
                 reader = DictReader(file)
                 for row in reader:
-                    Item(
+                    cls(
                         name=row["name"],
                         price=float(row["price"]),
-                        quantity=Item.string_to_number(row["quantity"]),
+                        quantity=cls.string_to_number(row["quantity"]),
                     )
         except FileNotFoundError:
             print(f"Файл {file_path} поврежден или не найден. Проверьте путь.")
