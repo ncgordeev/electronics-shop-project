@@ -3,6 +3,7 @@ import pytest
 
 from src.item import Item
 from config import ITEMS_CSV, ITEMS_CSV_ERR
+from tests.fixture_item_instances import get_instance
 
 
 @pytest.mark.parametrize(
@@ -100,3 +101,17 @@ def test_instantiate_from_csv_item():
     Item.instantiate_from_csv(ITEMS_CSV)
     first_item = Item.all[0]
     assert first_item.name == "Смартфон"
+
+
+def test_item_str(get_instance):
+    instance_1, instance_2, instance_3 = get_instance
+    assert str(instance_1) == "Смартфон"
+    assert str(instance_2) == "НоутбукProSuper"
+    assert str(instance_3) == ""
+
+
+def test_item_repr(get_instance):
+    instance_1, instance_2, instance_3 = get_instance
+    assert repr(instance_1) == 'Item(Смартфон, 20, 10)'
+    assert repr(instance_2) == 'Item(НоутбукProSuper, 200, 50)'
+    assert repr(instance_3) == 'Item('', 0, 0)'
