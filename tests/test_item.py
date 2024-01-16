@@ -115,3 +115,11 @@ def test_item_repr(get_instance):
     assert repr(instance_1) == 'Item(Смартфон, 20, 10)'
     assert repr(instance_2) == 'Item(НоутбукProSuper, 200, 50)'
     assert repr(instance_3) == 'Item('', 0, 0)'
+
+
+def test_item_add(get_instance):
+    instance_1, instance_2, instance_3 = get_instance
+    assert instance_1 + instance_2 == 60
+
+    with pytest.raises(ValueError):
+        instance_1 + 100

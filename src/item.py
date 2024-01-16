@@ -21,12 +21,6 @@ class Item:
         self.quantity = quantity
         Item.all.append(self)
 
-    def __str__(self) -> str:
-        return f"{self.__name}"
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.__name}, {self.price}, {self.quantity})"
-
     @property
     def name(self):
         return self.__name
@@ -86,3 +80,17 @@ class Item:
             numbers = string_to_num.split(".")
             number = int(numbers[0])
             return number
+
+    def __str__(self) -> str:
+        return f"{self.__name}"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.__name}, {self.price}, {self.quantity})"
+
+    def __add__(self, other):
+        """
+        This method allows additions instances of a class with each other
+        """
+        if not isinstance(other, self.__class__):
+            raise ValueError("Складывать можно только экземпляры класса Item и дочерние от него")
+        return self.quantity + other.quantity
