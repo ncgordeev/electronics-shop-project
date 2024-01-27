@@ -1,8 +1,10 @@
 """Здесь надо написать тесты с использованием pytest для модуля item."""
 import pytest
 
+from exceptions import InstantiateCSVError
 from src.item import Item
-from config import ITEMS_CSV, ITEMS_CSV_ERR
+from config import ITEMS_CSV, ITEMS_CSV_ERR, ITEMS_CSV_CORRUPTED
+from src.phone import Phone
 from tests.fixture_item_instances import get_instance
 
 
@@ -92,9 +94,14 @@ def test_instantiate_from_csv():
     assert len(Item.all) == 5
 
 
-def test_instantiate_from_csv_err():
+def test_instantiate_from_csv_nf_err():
     with pytest.raises(FileNotFoundError):
         Item.instantiate_from_csv(ITEMS_CSV_ERR)
+
+
+def test_instantiate_from_csv_corrupt_err():
+    with pytest.raises(InstantiateCSVError):
+        Item.instantiate_from_csv(ITEMS_CSV_CORRUPTED)
 
 
 def test_instantiate_from_csv_item():
@@ -115,3 +122,17 @@ def test_item_repr(get_instance):
     assert repr(instance_1) == 'Item(Смартфон, 20, 10)'
     assert repr(instance_2) == 'Item(НоутбукProSuper, 200, 50)'
     assert repr(instance_3) == 'Item('', 0, 0)'
+
+
+def test_item_add(get_instance):
+    phone = Phone("iPhone 14", 120_000, 5, 2)
+    instance_1, instance_2, instance_3 = get_instance
+    assert instance_1 + instance_2 == 60
+    assert instance_1 + phone == 15
+    assert phone + instance_1 == 15
+
+
+def test_item_add_attr_err(get_instance):
+    instance_1, instance_2, instance_3 = get_instance
+    with pytest.raises(AttributeError):
+        instance_1 + 100

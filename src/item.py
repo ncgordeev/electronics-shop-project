@@ -1,4 +1,5 @@
 from csv import DictReader
+from exceptions import InstantiateCSVError
 
 
 class Item:
@@ -16,16 +17,11 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
+        super().__init__()
         self.__name = name
         self.price = price
         self.quantity = quantity
         Item.all.append(self)
-
-    def __str__(self) -> str:
-        return f"{self.__name}"
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.__name}, {self.price}, {self.quantity})"
 
     @property
     def name(self):
@@ -70,8 +66,10 @@ class Item:
                         quantity=cls.string_to_number(row["quantity"]),
                     )
         except FileNotFoundError:
-            print(f"Файл {file_path} поврежден или не найден. Проверьте путь.")
-            raise
+            raise FileNotFoundError(f"Файл {file_path} не найден. Проверьте путь.")
+
+        except KeyError:
+            raise InstantiateCSVError(f"Файл {file_path} поврежден")
 
     @staticmethod
     def string_to_number(string_to_num):
@@ -86,3 +84,19 @@ class Item:
             numbers = string_to_num.split(".")
             number = int(numbers[0])
             return number
+
+    def __str__(self) -> str:
+        return f"{self.__name}"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.__name}, {self.price}, {self.quantity})"
+
+    def __add__(self, other):
+        """
+        This method allows additions instances of a class with each other
+        """
+
+        if isinstance(other, self.__class__) or issubclass(self.__class__, other.__class__):
+            return self.quantity + other.quantity
+        else:
+            raise AttributeError("Складывать можно только экземпляры класса Item и дочерние от него")
