@@ -1,4 +1,5 @@
 from csv import DictReader
+from exceptions import InstantiateCSVError
 
 
 class Item:
@@ -65,8 +66,10 @@ class Item:
                         quantity=cls.string_to_number(row["quantity"]),
                     )
         except FileNotFoundError:
-            print(f"Файл {file_path} поврежден или не найден. Проверьте путь.")
-            raise
+            raise FileNotFoundError(f"Файл {file_path} не найден. Проверьте путь.")
+
+        except KeyError:
+            raise InstantiateCSVError(f"Файл {file_path} поврежден")
 
     @staticmethod
     def string_to_number(string_to_num):
@@ -92,6 +95,8 @@ class Item:
         """
         This method allows additions instances of a class with each other
         """
-        if not isinstance(other, self.__class__):
-            raise ValueError("Складывать можно только экземпляры класса Item и дочерние от него")
-        return self.quantity + other.quantity
+
+        if isinstance(other, self.__class__) or issubclass(self.__class__, other.__class__):
+            return self.quantity + other.quantity
+        else:
+            raise AttributeError("Складывать можно только экземпляры класса Item и дочерние от него")

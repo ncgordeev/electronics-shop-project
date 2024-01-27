@@ -2,10 +2,9 @@ from src.item import Item
 
 
 class Mixin:
-    __language = "EN"
 
-    def __init__(self):
-        self.__language = self.__language
+    def __init__(self, language="EN"):
+        self.__language = language
 
     @property
     def language(self):
